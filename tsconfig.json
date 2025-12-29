@@ -10,10 +10,10 @@
     "module": "ESNext",
     "target": "ES2023",
     "moduleResolution": "node",
-    "types": [],
+    // "types": [],
     // For nodejs:
     // "lib": ["esnext"],
-    // "types": ["node"],
+    "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs
@@ -44,5 +44,5 @@
     "esModuleInterop": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/generated"]
+  "exclude": ["node_modules", "dist", "generated/prisma"]
 }

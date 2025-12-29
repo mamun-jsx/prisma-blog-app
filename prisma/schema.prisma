@@ -45,7 +45,10 @@ model Comment {
   authorId  String
   postId    String
   post      Post          @relation(fields: [postId], references: [id])
+  // self relation to catch replay of the comment
   patentId  String?
+  parent    Comment?      @relation("commentReplies",fields: [patentId], references: [id])
+  replies  Comment[] @relation("commentReplies")
   status    CommentStatus @default(APPROVED)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
