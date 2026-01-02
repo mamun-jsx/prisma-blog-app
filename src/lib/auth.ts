@@ -51,16 +51,19 @@ export const auth = betterAuth({
     requireEmailVerification: true,
   },
   emailVerification: {
+    sendOnSignUp: true, // only when user wants create account
+
     sendVerificationEmail: async ({ user, url, token }, request) => {
       // send token / generate token
       const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
 
-      const info = await transporter.sendMail({
-        from: '"Prisma Blog App" <prismablog@gmail.com>',
-        to: user?.email,
-        subject: "Please verify your email",
-        text: "Hello world?", // Plain-text version of the message
-        html: `
+      try {
+        const info = await transporter.sendMail({
+          from: '"Prisma Blog App" <prismablog@gmail.com>',
+          to: user?.email,
+          subject: "Please verify your email",
+          text: "Hello world?", // Plain-text version of the message
+          html: `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -217,8 +220,11 @@ export const auth = betterAuth({
 </body>
 </html>
 `,
-      });
-      console.log("message sent : ", info.messageId);
+        });
+        console.log("message sent : ", info.messageId);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 });
