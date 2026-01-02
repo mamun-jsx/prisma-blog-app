@@ -52,7 +52,7 @@ export const auth = betterAuth({
   },
   emailVerification: {
     sendOnSignUp: true, // only when user wants create account
-
+    autoSignInAfterVerification: true, //auto sign in after verification...
     sendVerificationEmail: async ({ user, url, token }, request) => {
       // send token / generate token
       const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
@@ -227,6 +227,7 @@ export const auth = betterAuth({
       }
     },
   },
+
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
