@@ -195,7 +195,7 @@ export const auth = betterAuth({
               </p>
 
               <p class="link-text">
-                ${verificationUrl}
+                ${url}
               </p>
 
               <p style="margin-top: 30px; font-size: 13px; color: #6b7280;">
@@ -225,6 +225,12 @@ export const auth = betterAuth({
       } catch (error) {
         console.error(error);
       }
+    },
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
 });
