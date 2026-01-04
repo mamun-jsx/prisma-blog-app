@@ -17,5 +17,19 @@ const createPost = async (req: Request, res: Response) => {
       .json({ error: "post creation failed ", message: error?.message });
   }
 };
+//
+const getAllPost = async (req: Request, res: Response) => {
+  try {
+    const { search } = req.query;
+    const searchString = typeof search === "string" ? search : undefined;
+    const result = await postService.getAllPost({ search: searchString });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Post fail to fetch",
+      details: error,
+    });
+  }
+};
 
-export const postController = { createPost };
+export const postController = { getAllPost, createPost };

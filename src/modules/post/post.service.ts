@@ -13,5 +13,16 @@ const createPost = async (
   });
   return result;
 };
-
-export const postService = { createPost };
+//?=====================fetch all data from database==========
+const getAllPost = async (payload: { search: string | undefined }) => {
+  const allPost = await prisma.post.findMany({
+    where: {
+      title: {
+        contains: payload.search as string,
+        mode: "insensitive",
+      },
+    },
+  });
+  return allPost;
+};
+export const postService = { createPost, getAllPost };
