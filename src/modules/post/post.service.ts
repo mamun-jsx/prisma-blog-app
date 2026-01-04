@@ -1,4 +1,5 @@
 import { Post } from "../../../generated/prisma/client";
+import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
 const createPost = async (
@@ -14,30 +15,51 @@ const createPost = async (
   return result;
 };
 //?=====================fetch all data from database==========
-const getAllPost = async (payload: { search: string | undefined }) => {
-  const allPost = await prisma.post.findMany({
-    where: {
-      //  OR is a condition to take search input with title or content where input matches..
+const getAllPost = async ({
+  search,
+  tags,
+}: {
+  search: string | undefined;
+  tags: string[] | [];
+}) => {
+  const andConditions: PostWhereInput[] = [];
+  if (search) {
+    andConditions.push({
       OR: [
         {
           title: {
-            contains: payload.search as string,
+            contains: search as string,
             mode: "insensitive",
           },
         },
         {
           content: {
-            contains: payload.search as string,
+            contains: search as string,
             mode: "insensitive",
           },
         },
         {
           tags: {
             // use has because tags is a array
-            has: payload.search as string,
+            has: search as string,
           },
         },
       ],
+    });
+  }
+  if (tags.length > 0) {
+    andConditions.push({
+      tags: {
+        hasEvery: tags as string[],
+      },
+    });
+  }
+  const allPost = await prisma.post.findMany({
+    // search
+    where: {
+      //  OR is a condition to take search input with title or content where input matches..
+
+      AND: andConditions,
     },
   });
   return allPost;
