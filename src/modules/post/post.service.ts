@@ -20,11 +20,13 @@ const getAllPost = async ({
   tags,
   isFeatured,
   status,
+  authorId,
 }: {
   search: string | undefined;
   tags: string[] | [];
   isFeatured: boolean | undefined;
   status: PostStatus | undefined;
+  authorId: string | undefined;
 }) => {
   const andConditions: PostWhereInput[] = [];
   if (search) {
@@ -66,6 +68,10 @@ const getAllPost = async ({
   // status
   if (status) {
     andConditions.push({ status });
+  }
+  // author
+  if (authorId) {
+    andConditions.push({ authorId });
   }
   const allPost = await prisma.post.findMany({
     // search
