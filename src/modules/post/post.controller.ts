@@ -23,9 +23,26 @@ const getAllPost = async (req: Request, res: Response) => {
     const { search } = req.query;
     const searchString = typeof search === "string" ? search : undefined;
     //  query with multiple keyword as tags
-    const tags = req.query.tags ? (req.query.tags as string).split(','):[]
-    console.log(typeof tags)
-    const result = await postService.getAllPost({ search: searchString , tags});
+    const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
+    //  isFeatured by searching
+    const isFeatured = req.query.isFeatured
+      ? req.query.isFeatured === "true"
+        ? true
+        : req.query.isFeatured === "false"
+        ? false
+        : undefined
+      : undefined; 
+   
+   
+   
+   
+      //------------------------- result------------------
+      const result = await postService.getAllPost({
+      search: searchString,
+      tags,
+      isFeatured,
+    });
+
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({
