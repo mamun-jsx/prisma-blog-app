@@ -24,6 +24,8 @@ const getAllPost = async ({
   page,
   limit,
   skip,
+  sortBy,
+  sortOrder,
 }: {
   search: string | undefined;
   tags: string[] | [];
@@ -33,6 +35,8 @@ const getAllPost = async ({
   page: number;
   limit: number;
   skip: number;
+  sortBy: string | undefined;
+  sortOrder: string | undefined;
 }) => {
   const andConditions: PostWhereInput[] = [];
   if (search) {
@@ -88,6 +92,13 @@ const getAllPost = async ({
 
       AND: andConditions,
     },
+    // orderBy
+    orderBy:
+      sortBy && sortOrder
+        ? {
+            [sortBy]: sortOrder,
+          }
+        : { createdAt: "desc" },
   });
   return allPost;
 };
