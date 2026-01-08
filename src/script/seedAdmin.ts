@@ -1,10 +1,10 @@
 import { prisma } from "../lib/prisma";
 import { UserRole } from "../modules/post/post.router";
 
-//
+//**________________________ |_| ________________________________
+
 async function seedAdmin() {
   try {
-    
     const adminData = {
       name: "admin Saheb",
       email: "admin@admin.com",
