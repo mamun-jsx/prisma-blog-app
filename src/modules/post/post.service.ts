@@ -100,6 +100,21 @@ const getAllPost = async ({
           }
         : { createdAt: "desc" },
   });
-  return allPost;
+  // pagination data show..
+  const total = await prisma.post.count({
+    where: {
+      AND: andConditions,
+    },
+  });
+
+  return {
+    allPost, // all data
+    // meta_Data
+    total,
+    page,
+    limit,
+    // total page count
+    totalPages: Math.ceil(total / limit),
+  };
 };
 export const postService = { createPost, getAllPost };
