@@ -76,9 +76,10 @@ const auth = (...roles: UserRole[]) => {
   };
 };
 
-router.get("/posts",postController.getAllPost)
+router.get("/posts", postController.getAllPost);
 
-// create a post 
+//get by id
+router.get("/:id", postController.getPostById);
+// create a post
 router.post("/post", auth(UserRole.USER), postController.createPost);
-
 export const postRouter: Router = router;
