@@ -22,7 +22,7 @@ const createComment = async (payload: {
     data: payload,
   });
 };
+// =========================| export all func |=======================
 export const commentService = {
   createComment,
 };
-
