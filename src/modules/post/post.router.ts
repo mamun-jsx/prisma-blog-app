@@ -24,7 +24,7 @@ declare global {
   }
 }
 // auth middle wear-->
-const auth = (...roles: UserRole[]) => {
+export const auth = (...roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const session = await betterAuth.api.getSession({
