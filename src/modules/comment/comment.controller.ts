@@ -26,7 +26,21 @@ const getCommentById = async (req: Request, res: Response) => {
     });
   }
 };
+// =================== get comment by author ============
+const getCommentByAuthor = async (req: Request, res: Response)=>{
+  try {
+    const {authorId} = req.params
+    const result = await commentService.getCommentByAuthor(authorId as string)
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({
+      error: "comment is not found with this id.. ",
+      details: error,
+    });
+}
+}
 export const commentController = {
   createComment,
   getCommentById,
+  getCommentByAuthor
 };

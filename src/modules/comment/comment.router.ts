@@ -11,4 +11,7 @@ router.post(
 );
 // get comment by id
 router.get("/:commentId", commentController.getCommentById);
+// get comment by author
+router.get("/author/:authorId", commentController.getCommentByAuthor);
+
 export const commentRouter: Router = router;
