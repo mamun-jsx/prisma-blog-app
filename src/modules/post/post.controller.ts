@@ -75,13 +75,13 @@ const getAllPost = async (req: Request, res: Response) => {
 const getPostById = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
-   
+
     if (!postId) {
       throw new Error("Post id is required");
     }
 
     const result = await postService.getPostById(postId);
-    res.status(200).json(result); 
+    res.status(200).json(result);
     // send the result
   } catch (error) {
     res.status(400).json({
@@ -89,5 +89,51 @@ const getPostById = async (req: Request, res: Response) => {
       details: error,
     });
   }
-}
-export const postController = { getAllPost, createPost, getPostById };
+};
+// ==============| get my comment by id |========================
+const getMyPostById = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      throw new Error("You are not authorized ");
+    }
+    const result = await postService.getMyPostById(user?.id as string);
+    // send result to
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Post fail to fetch",
+      details: error,
+    });
+  }
+};
+// ==============| get my comment by id |========================
+const updateMyOwnPost = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const {postId} = req.params;
+    if (!user) {
+      throw new Error("You are not authorized ");
+    }
+    const result = await postService.updateMyOwnPost(
+      postId as string,
+      req.body,
+      user?.id
+    );
+    // send result to client side..... 
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Post update to fetch",
+      details: error,
+    });
+  }
+};
+
+export const postController = {
+  getMyPostById,
+  updateMyOwnPost,
+  getAllPost,
+  createPost,
+  getPostById,
+};

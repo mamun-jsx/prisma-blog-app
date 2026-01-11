@@ -156,5 +156,77 @@ const getPostById = async (postId: string) => {
     return postData;
   });
 };
+//?===================== Get My by id ==========
+const getMyPostById = async (authorId: string) => {
+  //  user must have to active status otherwise we will not show him/her data....
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id: authorId,
+      status: "ACTIVE",
+    },
+    select: {
+      id: true,
+    },
+  });
+  // show the data which was posted by user
+  const result = await prisma.post.findMany({
+    where: {
+      id: authorId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
+    },
+  });
+  // calculate how many post you have
+  // const total = await prisma.post.count({
+  //   where: {
+  //     authorId,
+  //   },
+  // });
+  // return { data: result, total };
+  return result;
+};
+// ==============| update my own post |===========
 
-export const postService = { createPost, getAllPost, getPostById };
+const updateMyOwnPost = async (
+  postId: string,
+  data: Partial<Post>,
+  authorId: string
+) => {
+  const postData = await prisma.post.findUniqueOrThrow({
+    where: {
+      id: postId,
+    },
+    select: {
+      id: true,
+      authorId: true,
+    },
+  });
+  // check author id is true or false
+  if (postData.authorId !== authorId) {
+    throw new Error("Your are not owner of the post");
+  }
+  const result = await prisma.post.update({
+    where: {
+      id: postData.id,
+    },
+    data,
+  });
+  // return the result.......
+  return result;
+};
+
+export const postService = {
+  getMyPostById,
+  createPost,
+  getAllPost,
+  getPostById,
+  updateMyOwnPost,
+};

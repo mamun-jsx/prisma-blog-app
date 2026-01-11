@@ -80,6 +80,32 @@ router.get("/posts", postController.getAllPost);
 
 //get by id
 router.get("/:id", postController.getPostById);
-// create a post
-router.post("/post", auth(UserRole.USER), postController.createPost);
+// create a single  post
+router.post(
+  "/post",
+  auth(UserRole.USER, UserRole.ADMIN),
+  postController.createPost
+);
+// get my post by id
+router.get(
+  "/my-posts",
+  auth(UserRole.ADMIN, UserRole.USER),
+  postController.getMyPostById
+);
+// updateOwnPost
+router.patch(
+  "/:postId",
+  auth(UserRole.ADMIN, UserRole.USER),
+  postController.updateMyOwnPost
+);
+/**
+ * =========================================
+ * =========================================
+ * =========================================
+ * =========================================
+ * =========================================
+ * =========================================
+ * =========================================
+ * =========================================
+ **/
 export const postRouter: Router = router;
