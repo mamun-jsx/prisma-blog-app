@@ -55,8 +55,27 @@ const getCommentByAuthor = async (authorId: string) => {
   });
 };
 // ==============| delete a comment |=================
-const deleteCommentById = async (id: string) => {
-  console.log(id);
+const deleteCommentById = async (commentId: string, authorId: string) => {
+  const commentData = await prisma.comment.findFirst({
+    where: {
+      id: commentId,
+      authorId,
+    },
+    select: {
+      // visible only id so the all data is not fetch into frontend
+      id: true,
+    },
+  });
+
+  if (!commentData) {
+    throw new Error("your provided input is invalid");
+  }
+  // delete the comment data which is taken from commentData
+  return await prisma.comment.delete({
+    where: {
+      id: commentData.id,
+    },
+  });
 };
 // =========================| export all func |=======================
 export const commentService = {
