@@ -45,10 +45,10 @@ model Comment {
   content   String        @db.Text
   authorId  String
   postId    String
-  post      Post          @relation(fields: [postId], references: [id])
+  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   // self relation to catch replay of the comment
   patentId  String?
-  parent    Comment?      @relation("commentReplies", fields: [patentId], references: [id])
+  parent    Comment?      @relation("commentReplies", fields: [patentId], references: [id], onDelete: Cascade)
   replies   Comment[]     @relation("commentReplies")
   status    CommentStatus @default(APPROVED)
   createdAt DateTime      @default(now())

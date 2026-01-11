@@ -56,8 +56,29 @@ const deleteCommentById = async (req: Request, res: Response) => {
     });
   }
 };
+// ========================| Update a comment by id ============
+const updateCommentById = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { commentId } = req.params;
+    const result = await commentService.updateCommentById(
+      commentId as string,
+      req.body,
+      user?.id as string
+    );
+    // send response to client_side
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      error: "Comment update failed!",
+      details: error,
+    });
+  }
+};
 export const commentController = {
   createComment,
+  updateCommentById,
   getCommentById,
   getCommentByAuthor,
   deleteCommentById,

@@ -19,4 +19,6 @@ router.delete(
   auth(UserRole.ADMIN, UserRole.USER),
   commentController.deleteCommentById
 );
+// update comment by id
+router.patch("/:commentId", commentController.updateCommentById);
 export const commentRouter: Router = router;
