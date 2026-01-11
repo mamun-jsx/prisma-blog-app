@@ -76,10 +76,43 @@ const updateCommentById = async (req: Request, res: Response) => {
     });
   }
 };
+// ========================| Moderate comment  ============
+const moderateComment = async (req: Request, res: Response) => {
+  try {
+    const { commentId } = req.params;
+    const result = await commentService.moderateComment(
+      commentId as string,
+      req.body
+    );
+
+    // send response to client_side
+    res.status(200).json(result);
+  } catch (error) {
+    // instance of
+    const errorMessage =
+      error instanceof Error ? error?.message : "comment update is failed";
+    res.status(400).json({
+      error: errorMessage,
+      details: error,
+    });
+  }
+};
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ * **/
+// !=============================================================================
+//! ======================| Exports all function |===============================
 export const commentController = {
   createComment,
   updateCommentById,
   getCommentById,
   getCommentByAuthor,
   deleteCommentById,
+  moderateComment,
 };
