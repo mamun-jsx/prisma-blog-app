@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { commentService } from "./comment.service";
-
+// =================== create a comment ============
 const createComment = async (req: Request, res: Response) => {
   const user = req.user;
   req.body.authorId = user?.id;

@@ -10,6 +10,5 @@ router.post(
   commentController.createComment
 );
 // get comment by id
-
 router.get("/:commentId", commentController.getCommentById);
 export const commentRouter: Router = router;
