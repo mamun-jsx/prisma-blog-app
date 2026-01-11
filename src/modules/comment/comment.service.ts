@@ -39,7 +39,7 @@ const getCommentBtId = async (id: string) => {
     },
   });
 };
-// =============== Get comment by author=============
+// ===============| Get comment by author |================
 const getCommentByAuthor = async (authorId: string) => {
   return await prisma.comment.findMany({
     where: { authorId },
@@ -54,9 +54,14 @@ const getCommentByAuthor = async (authorId: string) => {
     },
   });
 };
+// ==============| delete a comment |=================
+const deleteCommentById = async (id: string) => {
+  console.log(id);
+};
 // =========================| export all func |=======================
 export const commentService = {
   createComment,
   getCommentByAuthor,
   getCommentBtId,
+  deleteCommentById,
 };

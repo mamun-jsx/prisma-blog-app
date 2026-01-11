@@ -13,5 +13,10 @@ router.post(
 router.get("/:commentId", commentController.getCommentById);
 // get comment by author
 router.get("/author/:authorId", commentController.getCommentByAuthor);
-
+// ============= delete comment by id
+router.delete(
+  "/:commentId",
+  auth(UserRole.ADMIN, UserRole.USER),
+  commentController.deleteCommentById
+);
 export const commentRouter: Router = router;
