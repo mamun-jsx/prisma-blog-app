@@ -100,6 +100,12 @@ const getAllPost = async ({
             [sortBy]: sortOrder,
           }
         : { createdAt: "desc" },
+    // comments count-- how many comment has into a post
+    include: {
+      _count: {
+        select: { comments: true },
+      },
+    },
   });
   // pagination data show..
   const total = await prisma.post.count({
@@ -140,6 +146,7 @@ const getPostById = async (postId: string) => {
             patentId: null,
             status: CommentStatus.APPROVED,
           },
+          orderBy: { createdAt: "desc" },
           include: {
             replies: true,
           },

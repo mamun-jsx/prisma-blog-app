@@ -9,5 +9,7 @@ router.post(
   auth(UserRole.ADMIN, UserRole.USER),
   commentController.createComment
 );
+// get comment by id
+
 
 export const commentRouter: Router = router;
