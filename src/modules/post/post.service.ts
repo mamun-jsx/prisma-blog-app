@@ -210,9 +210,13 @@ const updateMyOwnPost = async (
       authorId: true,
     },
   });
-  // check author id is true or false
-  if (!isAdmin && (postData.authorId !== authorId)) {
+  
+  //? check author id is true or false and provide power to edit content
+  if (!isAdmin && postData.authorId !== authorId) {
     throw new Error("Your are not owner of the post");
+  }
+  if (!isAdmin) {
+    delete data.isFeatured;
   }
   const result = await prisma.post.update({
     where: {
