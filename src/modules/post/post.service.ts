@@ -184,6 +184,7 @@ const getMyPostById = async (authorId: string) => {
       },
     },
   });
+
   // calculate how many post you have
   // const total = await prisma.post.count({
   //   where: {
@@ -210,7 +211,7 @@ const updateMyOwnPost = async (
       authorId: true,
     },
   });
-  
+
   //? check author id is true or false and provide power to edit content
   if (!isAdmin && postData.authorId !== authorId) {
     throw new Error("Your are not owner of the post");
@@ -227,11 +228,42 @@ const updateMyOwnPost = async (
   // return the result.......
   return result;
 };
+// =============== | delete a single post |=================
 
+const deletePost = async (
+  postId: string,
+  authorId: string,
+  isAdmin: boolean
+) => {
+  const postData = await prisma.post.findUniqueOrThrow({
+    where: {
+      id: postId,
+    },
+    select: {
+      authorId: true,
+    },
+  });
+  // ========= check the post owner
+  if (!isAdmin && postData.authorId !== authorId) {
+    throw new Error("You are not the owner pf this post");
+  }
+  // delete the post where id is match with the request
+  return await prisma.post.delete({
+    where: {
+      id: postId,
+    },
+  });
+};
+
+/*
+========================================================================================
+========================================================================================
+*/
 export const postService = {
   getMyPostById,
   createPost,
   getAllPost,
+  deletePost,
   getPostById,
   updateMyOwnPost,
 };

@@ -120,9 +120,33 @@ const updateMyOwnPost = async (req: Request, res: Response) => {
     const result = await postService.updateMyOwnPost(
       postId as string,
       req.body,
-      user?.id, isAdmin
+      user?.id,
+      isAdmin
     );
     // send result to client side.....
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Post update to fetch",
+      details: error,
+    });
+  }
+};
+// ==============| delete post |========================
+const deletePost = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { postId } = req.params;
+    if (!user) {
+      throw new Error("You are not authorized ");
+    }
+    const isAdmin = user.role === UserRole.ADMIN;
+    const result = await postService.deletePost(
+      postId as string,
+      user?.id,
+      isAdmin
+    );
+    //* send result to client side.....
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({
@@ -138,4 +162,5 @@ export const postController = {
   getAllPost,
   createPost,
   getPostById,
+  deletePost,
 };

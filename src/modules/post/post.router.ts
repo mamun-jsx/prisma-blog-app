@@ -98,6 +98,13 @@ router.patch(
   auth(UserRole.ADMIN, UserRole.USER),
   postController.updateMyOwnPost
 );
+// delete a post
+router.delete(
+  "/:postId",
+  auth(UserRole.ADMIN, UserRole.USER),
+  postController.deletePost
+);
+
 /**
  * =========================================
  * =========================================
