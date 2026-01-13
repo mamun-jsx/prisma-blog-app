@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { postService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
+import { UserRole } from "./post.router";
 
 // =================== create a post ====================
 
@@ -111,16 +112,17 @@ const getMyPostById = async (req: Request, res: Response) => {
 const updateMyOwnPost = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    const {postId} = req.params;
+    const { postId } = req.params;
     if (!user) {
       throw new Error("You are not authorized ");
     }
+    const isAdmin = user.role === UserRole.ADMIN;
     const result = await postService.updateMyOwnPost(
       postId as string,
       req.body,
-      user?.id
+      user?.id, isAdmin
     );
-    // send result to client side..... 
+    // send result to client side.....
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({
