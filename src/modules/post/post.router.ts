@@ -104,10 +104,11 @@ router.delete(
   auth(UserRole.ADMIN, UserRole.USER),
   postController.deletePost
 );
+// get states
+router.get("/:stats", auth(UserRole.ADMIN), postController.getStates);
 /**********************************************************************************************
  * =========================================
  * =========================================
  ************************************************************************************************/
-
 
 export const postRouter: Router = router;

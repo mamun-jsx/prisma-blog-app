@@ -155,6 +155,19 @@ const deletePost = async (req: Request, res: Response) => {
     });
   }
 };
+// ============================= States=============
+const getStates = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.getStates;
+    //* send result to client side.....
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Post update to fetch",
+      details: error,
+    });
+  }
+};
 /**********************************************************************************************
  * =========================================
                 Export all function 
@@ -168,4 +181,5 @@ export const postController = {
   createPost,
   getPostById,
   deletePost,
+  getStates,
 };

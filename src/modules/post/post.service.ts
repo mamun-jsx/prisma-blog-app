@@ -254,11 +254,37 @@ const deletePost = async (
     },
   });
 };
+// ______________ Statics for admin dashboard ____________________
+const getStates = async () => {
+  return await prisma.$transaction(async (tx) => {
+    const [totalPosts, totalPublished, totalDraftPosts, totalArchivedPost] =
+      await Promise.all([
+        tx.post.count(),
+        tx.post.count({
+          where: { status: PostStatus.PUBLISHED },
+        }),
+        tx.post.count({
+          where: {
+            status: PostStatus.DRAFT,
+          },
+        }),
+        tx.post.count({
+          where: {
+            status: PostStatus.ARCHIVED,
+          },
+        }),
+      ]);
 
-/*
-========================================================================================
-========================================================================================
-*/
+    // total info as json
+    return { totalPosts, totalPublished, totalDraftPosts, totalArchivedPost };
+  });
+};
+/**********************************************************************************************
+ * =========================================
+                Export all function 
+* =========================================
+ ************************************************************************************************/
+
 export const postService = {
   getMyPostById,
   createPost,
@@ -266,4 +292,5 @@ export const postService = {
   deletePost,
   getPostById,
   updateMyOwnPost,
+  getStates,
 };
