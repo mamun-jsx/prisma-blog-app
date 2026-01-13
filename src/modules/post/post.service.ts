@@ -257,26 +257,51 @@ const deletePost = async (
 // ______________ Statics for admin dashboard ____________________
 const getStates = async () => {
   return await prisma.$transaction(async (tx) => {
-    const [totalPosts, totalPublished, totalDraftPosts, totalArchivedPost] =
-      await Promise.all([
-        tx.post.count(),
-        tx.post.count({
-          where: { status: PostStatus.PUBLISHED },
-        }),
-        tx.post.count({
-          where: {
-            status: PostStatus.DRAFT,
-          },
-        }),
-        tx.post.count({
-          where: {
-            status: PostStatus.ARCHIVED,
-          },
-        }),
-      ]);
+    const [
+      totalPosts,
+      totalPublished,
+      totalDraftPosts,
+      totalArchivedPost,
+      approvedComment,
+      totalUsers,
+      adminCount,
+      userCount,
+      totalViews,
+    ] = await Promise.all([
+      await tx.post.count(),
+
+      await tx.post.count({
+        where: { status: PostStatus.PUBLISHED },
+      }),
+      await tx.post.count({ where: { status: PostStatus.DRAFT } }),
+      await tx.post.count({
+        where: {
+          status: PostStatus.ARCHIVED,
+        },
+      }),
+      await tx.comment.count(),
+      await tx.comment.count({ where: { status: CommentStatus.APPROVED } }),
+      await tx.user.count(),
+      await tx.user.count({ where: { role: "ADMIN" } }),
+      await tx.user.count({ where: { role: "USER" } }),
+      // total views
+      await tx.post.aggregate({
+        _sum: { views: true },
+      }),
+    ]);
 
     // total info as json
-    return { totalPosts, totalPublished, totalDraftPosts, totalArchivedPost };
+    return {
+      totalPosts,
+      totalPublished,
+      totalDraftPosts,
+      totalArchivedPost,
+      approvedComment,
+      totalUsers,
+      adminCount,
+      userCount,
+      totalViews,
+    };
   });
 };
 /**********************************************************************************************
